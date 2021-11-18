@@ -33,25 +33,17 @@ public class PersonaService {
 	}
 	
 	public void updatePersona(Persona per) {
-		int index = -1;
-		for (Persona persona : this.dbPersonas) {
-			if(persona.getId() == per.getId()) {
-				index = this.dbPersonas.indexOf(persona);
-			}
-		}
-		if(index >= 0) {
-			this.dbPersonas.set(index, per);
+		Optional<Integer> i = this.dbPersonas.stream().filter(x -> x.getId() == per.getId()).map(x -> this.dbPersonas.indexOf(x)).findFirst();
+		if(!i.isEmpty()) {
+			this.dbPersonas.set(i.get(), per);
 		}
 	}
 	
 	public void deletePersonaById(Long id) {
-		int index = -1;
-		for (Persona persona : this.dbPersonas) {
-			if(persona.getId() == id) {
-				index = this.dbPersonas.indexOf(persona);
-			}
-		}
-		if(index >= 0) {
+		int index ;
+		Optional<Integer> i = this.dbPersonas.stream().filter(x -> x.getId() == id).map(x -> this.dbPersonas.indexOf(x)).findFirst();
+		index = i.get();
+		if(!i.isEmpty()) {
 			this.dbPersonas.remove(index);
 		}		
 	}
